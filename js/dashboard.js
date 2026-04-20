@@ -5,30 +5,50 @@ window.onload = function () {
   if (!user) {
     window.location.href = "index.html";
   } else {
-    loadFiles();
+    loadFiles(); // 📁 raíz
   }
 };
 
 // 📂 Cargar archivos como tarjetas
-function loadFiles() {
-  fetch(`${API_URL}?action=getDriveItems`)
+let currentFolder = null; // 📁 estado global
+
+function loadFiles(folderId = null) {
+
+  currentFolder = folderId;
+
+  let url = `${API_URL}?action=getDriveItems`;
+
+  if (folderId) {
+    url += `&folderId=${folderId}`;
+  }
+
+  fetch(url)
     .then(res => res.json())
     .then(data => {
-
-      console.log("Archivos:", data); // DEBUG
 
       let html = '<div class="grid">';
 
       data.forEach(item => {
 
-        if (item.type === "folder") {
+        if (item.type === "back") {
           html += `
-            <div class="card folder" onclick="openFolder('${item.id}')">
-              <div class="icon">📁</div>
-             <p class="tooltip" data-name="${item.name}">${item.name}</p>
+            <div class="card folder" onclick="loadFiles('${item.id}')">
+              <div class="icon">⬅</div>
+              <p>${item.name}</p>
             </div>
           `;
-        } else {
+        }
+
+        else if (item.type === "folder") {
+          html += `
+            <div class="card folder" onclick="loadFiles('${item.id}')">
+              <div class="icon">📁</div>
+              <p class="tooltip" data-name="${item.name}">${item.name}</p>
+            </div>
+          `;
+        }
+
+        else {
           html += `
             <div class="card file">
               <div class="icon">📄</div>
@@ -47,10 +67,7 @@ function loadFiles() {
       html += '</div>';
 
       document.querySelector(".files").innerHTML = html;
-    })
-    .catch(err => {
-      console.error(err);
-      document.querySelector(".files").innerHTML = "Error cargando archivos";
+
     });
 }
 
@@ -76,13 +93,13 @@ function uploadFile() {
         file: base64,
         fileName: file.name,
         mimeType: file.type,
-        usuario: JSON.parse(localStorage.getItem("user")).nombre
+        folderId: currentFolder // 🔥 clave
       })
     })
     .then(res => res.json())
     .then(() => {
-      alert("Archivo subido correctamente");
-      loadFiles();
+      alert("Archivo subido");
+      loadFiles(currentFolder);
     });
   };
 
