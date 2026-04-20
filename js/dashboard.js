@@ -5,25 +5,27 @@ window.onload = function () {
   if (!user) {
     window.location.href = "index.html";
   } else {
-    loadFiles(); // 📁 raíz
+    loadFiles();
   }
 };
 
-// 📂 Cargar archivos como tarjetas
-let currentFolder = null; // 📁 estado global
+// 📂 Estado global
+let currentFolder = null;
+let selectedFile = null;
 
+// 📂 Cargar archivos como tarjetas
 function loadFiles(folderId = null) {
 
   currentFolder = folderId;
 
   let url = `${API_URL}?action=getDriveItems`;
-
   if (folderId) {
     url += `&folderId=${folderId}`;
   }
-if (!folderId) {
-  document.querySelector(".breadcrumb").innerText = "Inicio";
-}
+
+  // Breadcrumb
+  document.querySelector(".breadcrumb").innerText = folderId ? "Carpeta" : "Inicio";
+
   fetch(url)
     .then(res => res.json())
     .then(data => {
@@ -67,45 +69,13 @@ if (!folderId) {
       });
 
       html += '</div>';
-
       document.querySelector(".files").innerHTML = html;
 
-    });
-}
-
-// 📤 Subir archivo
-function uploadFile() {
-  const fileInput = document.getElementById("fileInput");
-  const file = fileInput.files[0];
-
-  if (!file) {
-    alert("Selecciona un archivo");
-    return;
-  }
-
-  const reader = new FileReader();
-
-  reader.onload = function () {
-    const base64 = reader.result.split(",")[1];
-
-    fetch(API_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        action: "uploadFile",
-        file: base64,
-        fileName: file.name,
-        mimeType: file.type,
-        folderId: currentFolder // 🔥 clave
-      })
     })
-    .then(res => res.json())
-    .then(() => {
-      alert("Archivo subido");
-      loadFiles(currentFolder);
+    .catch(err => {
+      console.error(err);
+      document.querySelector(".files").innerHTML = "Error cargando archivos";
     });
-  };
-
-  reader.readAsDataURL(file);
 }
 
 // 👁 Vista previa
@@ -118,74 +88,45 @@ function downloadFile(url) {
   window.open(url, "_blank");
 }
 
-// 📂 Navegar carpeta (fase siguiente)
-function openFolder(id) {
-  alert("Entrar a carpeta (fase 5)");
-}
-
 // 🚪 Logout
 function logout() {
   localStorage.removeItem("user");
   window.location.href = "index.html";
 }
-// 🔥 ABRIR MODAL
+
+// =============================
+// 🔥 MODAL SUBIDA PROFESIONAL
+// =============================
+
+// 🔓 Abrir modal
 function openUploadModal() {
   document.getElementById("uploadModal").style.display = "flex";
 }
 
-// ❌ CERRAR MODAL
+// 🔒 Cerrar modal
 function closeUploadModal() {
   document.getElementById("uploadModal").style.display = "none";
+
+  // Reset
+  selectedFile = null;
+  document.getElementById("fileInfo").style.display = "none";
 }
 
-// 📂 INPUT FILE
-document.addEventListener("DOMContentLoaded", function () {
-
-  const fileInput = document.getElementById("fileInputHidden");
-
-  if (fileInput) {
-    fileInput.addEventListener("change", function () {
-      handleFileUpload(fileInput.files[0]);
-    });
-  }
-
-  const dropZone = document.getElementById("dropZone");
-
-  if (dropZone) {
-
-    dropZone.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      dropZone.classList.add("dragover");
-    });
-
-    dropZone.addEventListener("dragleave", () => {
-      dropZone.classList.remove("dragover");
-    });
-
-    dropZone.addEventListener("drop", (e) => {
-      e.preventDefault();
-      dropZone.classList.remove("dragover");
-
-      const file = e.dataTransfer.files[0];
-      handleFileUpload(file);
-    });
-  }
-
-});
-
-// 🚀 SUBIDA CENTRAL
-let selectedFile = null;
-
-// 📂 SELECCIÓN
+// 📂 Configurar eventos (IMPORTANTE)
 document.addEventListener("DOMContentLoaded", function () {
 
   const fileInput = document.getElementById("fileInputHidden");
   const dropZone = document.getElementById("dropZone");
 
-  fileInput.addEventListener("change", function () {
-    setFile(fileInput.files[0]);
+  // 📂 Selección desde botón
+  fileInput.addEventListener("change", function (e) {
+    if (e.target.files.length > 0) {
+      selectedFile = e.target.files[0];
+      showFileInfo(selectedFile);
+    }
   });
 
+  // 🖱 Drag & Drop
   dropZone.addEventListener("dragover", (e) => {
     e.preventDefault();
     dropZone.classList.add("dragover");
@@ -199,25 +140,24 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
     dropZone.classList.remove("dragover");
 
-    const file = e.dataTransfer.files[0];
-    setFile(file);
+    if (e.dataTransfer.files.length > 0) {
+      selectedFile = e.dataTransfer.files[0];
+      showFileInfo(selectedFile);
+    }
   });
 
 });
 
-// 🔥 GUARDAR ARCHIVO SELECCIONADO
-function setFile(file) {
-
-  if (!file) return;
-
-  selectedFile = file;
-
+// 🔍 Mostrar archivo seleccionado
+function showFileInfo(file) {
   document.getElementById("fileInfo").style.display = "block";
   document.getElementById("fileName").innerText = file.name;
 }
 
-// 🚀 CONFIRMAR SUBIDA
+// 🚀 Subir archivo (BOTÓN FUNCIONAL)
 function confirmUpload() {
+
+  console.log("Subiendo archivo...");
 
   if (!selectedFile) {
     alert("Selecciona un archivo primero");
@@ -243,10 +183,16 @@ function confirmUpload() {
     })
     .then(res => res.json())
     .then(() => {
+
       alert("Archivo subido correctamente");
+
       closeUploadModal();
       loadFiles(currentFolder);
-      selectedFile = null;
+
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Error al subir archivo");
     });
 
   };
