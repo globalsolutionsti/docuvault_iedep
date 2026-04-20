@@ -116,3 +116,41 @@ body {
   border-left: 1px solid #ddd;
   padding: 10px;
 }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.actions {
+  margin-top: 10px;
+}
+
+.actions button {
+  margin: 3px;
+  padding: 5px 8px;
+  border: none;
+  border-radius: 5px;
+  background: #1f3a5f;
+  color: white;
+  cursor: pointer;
+}
