@@ -144,16 +144,17 @@ function confirmUpload() {
     const base64 = reader.result.split(",")[1];
 
     fetch(API_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        action: "uploadFile",
-        file: base64,
-        fileName: selectedFile.name,
-        mimeType: selectedFile.type,
-        folderId: currentFolder,
-        usuario: JSON.parse(localStorage.getItem("user")).nombre
-      })
-    })
+  method: "POST",
+  mode: "no-cors", // 🔥 SOLUCIÓN CLAVE
+  body: JSON.stringify({
+    action: "uploadFile",
+    file: base64,
+    fileName: selectedFile.name,
+    mimeType: selectedFile.type,
+    folderId: currentFolder,
+    usuario: JSON.parse(localStorage.getItem("user")).nombre
+  })
+})
     .then(res => res.json())
     .then(() => {
 
