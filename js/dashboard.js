@@ -1,31 +1,21 @@
-// 🔐 Validar sesión
+// 🔐 Validar sesión y cargar archivos
 window.onload = function () {
   const user = localStorage.getItem("user");
 
   if (!user) {
     window.location.href = "index.html";
   } else {
-    loadHome();
+    loadFiles();
   }
 };
 
-// 🔄 Cargar inicio
-function loadHome() {
-  document.querySelector(".files").innerHTML = `
-    <h3>Bienvenido</h3>
-    <p>Selecciona una opción del menú para comenzar</p>
-  `;
-}
-
-// 🚪 Logout
-function logout() {
-  localStorage.removeItem("user");
-  window.location.href = "index.html";
-}
+// 📂 Cargar archivos como tarjetas
 function loadFiles() {
   fetch(`${API_URL}?action=getDriveItems`)
     .then(res => res.json())
     .then(data => {
+
+      console.log("Archivos:", data); // DEBUG
 
       let html = '<div class="grid">';
 
@@ -57,11 +47,22 @@ function loadFiles() {
       html += '</div>';
 
       document.querySelector(".files").innerHTML = html;
+    })
+    .catch(err => {
+      console.error(err);
+      document.querySelector(".files").innerHTML = "Error cargando archivos";
     });
 }
+
+// 📤 Subir archivo
 function uploadFile() {
   const fileInput = document.getElementById("fileInput");
   const file = fileInput.files[0];
+
+  if (!file) {
+    alert("Selecciona un archivo");
+    return;
+  }
 
   const reader = new FileReader();
 
@@ -80,27 +81,14 @@ function uploadFile() {
     })
     .then(res => res.json())
     .then(() => {
-      alert("Archivo subido");
+      alert("Archivo subido correctamente");
       loadFiles();
     });
   };
 
   reader.readAsDataURL(file);
 }
-function deleteFile(id) {
-  fetch(`${API_URL}?action=deleteFile&id=${id}`)
-    .then(() => loadFiles());
-}
 
-window.onload = function () {
-  const user = localStorage.getItem("user");
-
-  if (!user) {
-    window.location.href = "index.html";
-  } else {
-    loadFiles();
-  }
-};
 // 👁 Vista previa
 function previewFile(url) {
   window.open(url, "_blank");
@@ -111,7 +99,13 @@ function downloadFile(url) {
   window.open(url, "_blank");
 }
 
-// 📂 Navegar carpetas (fase siguiente)
+// 📂 Navegar carpeta (fase siguiente)
 function openFolder(id) {
-  alert("Entrar a carpeta (siguiente fase)");
+  alert("Entrar a carpeta (fase 5)");
+}
+
+// 🚪 Logout
+function logout() {
+  localStorage.removeItem("user");
+  window.location.href = "index.html";
 }
