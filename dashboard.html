@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>DocuVault</title>
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<!-- 🔷 HEADER -->
+<header class="topbar">
+  <div class="logo">DocuVault</div>
+
+  <div class="top-actions">
+    <input type="text" placeholder="Buscar documentos...">
+    <span class="icon">🔔</span>
+    <span class="icon">⚙️</span>
+    <span class="icon" onclick="logout()">❓</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- 🧭 SIDEBAR -->
+  <aside class="sidebar">
+    <ul>
+      <li class="active">🏠 Inicio</li>
+      <li>📄 Mis Documentos</li>
+      <li>👥 Compartidos</li>
+      <li>⭐ Favoritos</li>
+      <li>🕘 Recientes</li>
+    </ul>
+
+    <div class="library">
+      <h4>Bibliotecas</h4>
+      <ul>
+        <li class="trash">🗑 Papelera</li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- 📂 CONTENIDO -->
+  <main class="content">
+
+    <div class="toolbar">
+      <button class="primary">+ Nuevo / Subir</button>
+      <button>Nueva Carpeta</button>
+      <button disabled>Compartir</button>
+      <button disabled>Descargar</button>
+      <button disabled>Renombrar</button>
+      <button disabled>Eliminar</button>
+      <button disabled>Versiones</button>
+    </div>
+
+    <div class="breadcrumb">Inicio</div>
+
+    <div class="files">
+      <p>Cargando...</p>
+    </div>
+
+  </main>
+
+  <!-- 🧾 PANEL DERECHO -->
+  <aside class="right-panel">
+    <h4>Actividad reciente</h4>
+  </aside>
+
+</div>
+
+<script src="js/dashboard.js"></script>
+</body>
+</html>
