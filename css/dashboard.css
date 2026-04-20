@@ -154,3 +154,15 @@ body {
   color: white;
   cursor: pointer;
 }
+.card p {
+  margin: 8px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 🔥 máximo 2 líneas */
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
