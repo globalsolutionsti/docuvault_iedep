@@ -1,3 +1,4 @@
+// 🔐 Función login
 function login() {
   const usuario = document.getElementById("usuario").value;
   const password = document.getElementById("password").value;
@@ -19,3 +20,9 @@ function login() {
       document.getElementById("error").innerText = "Error de conexión";
     });
 }
+
+
+// 🚀 Evento del botón (AQUÍ VA)
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("btnLogin").addEventListener("click", login);
+});
