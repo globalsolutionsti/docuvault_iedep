@@ -137,41 +137,32 @@ function confirmUpload() {
     return;
   }
 
-  const reader = new FileReader();
+  const formData = new FormData();
 
-  reader.onload = function () {
+  formData.append("file", selectedFile);
+  formData.append("action", "uploadFile");
+  formData.append("folderId", currentFolder || "");
+  formData.append("usuario", JSON.parse(localStorage.getItem("user")).nombre);
 
-    const base64 = reader.result.split(",")[1];
-
-    fetch(API_URL, {
-  method: "POST",
-  mode: "no-cors", // 🔥 SOLUCIÓN CLAVE
-  body: JSON.stringify({
-    action: "uploadFile",
-    file: base64,
-    fileName: selectedFile.name,
-    mimeType: selectedFile.type,
-    folderId: currentFolder,
-    usuario: JSON.parse(localStorage.getItem("user")).nombre
+  fetch(API_URL, {
+    method: "POST",
+    body: formData
   })
-})
-    .then(res => res.json())
-    .then(() => {
+  .then(res => res.text()) // 🔥 IMPORTANTE
+  .then(res => {
 
-      alert("Archivo subido correctamente");
+    console.log("RESPUESTA:", res);
 
-      closeUploadModal();
-      loadFiles(currentFolder);
+    alert("Archivo subido correctamente");
 
-    })
-    .catch(err => {
-      console.error(err);
-      alert("Error al subir archivo");
-    });
+    closeUploadModal();
+    loadFiles(currentFolder);
 
-  };
-
-  reader.readAsDataURL(selectedFile);
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Error al subir archivo");
+  });
 }
 
 // ===============================
