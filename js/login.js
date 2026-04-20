@@ -1,4 +1,4 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbyUy1NhZSX1BWKFA3mDRcs8o3FUbfYyYFzkuq8VpnbPqhYRykpqF2G1mLYPeM2l5O6t/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzn04jKFTAARVpRbax4qrCyE5nnT3acrpV6TzFA4P47avLtXSV4esaVepPRQcv5obM/exec";
 
 function login() {
   const usuario = document.getElementById("usuario").value;
