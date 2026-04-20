@@ -1,10 +1,11 @@
-// 🔐 Validar sesión y cargar archivos
+// 🔐 Validar sesión
 window.onload = function () {
   const user = localStorage.getItem("user");
 
   if (!user) {
     window.location.href = "index.html";
   } else {
+    initUploadEvents(); // 🔥 IMPORTANTE
     loadFiles();
   }
 };
@@ -13,18 +14,18 @@ window.onload = function () {
 let currentFolder = null;
 let selectedFile = null;
 
-// 📂 Cargar archivos como tarjetas
+// ===============================
+// 📂 CARGAR ARCHIVOS
+// ===============================
 function loadFiles(folderId = null) {
 
   currentFolder = folderId;
 
   let url = `${API_URL}?action=getDriveItems`;
-  if (folderId) {
-    url += `&folderId=${folderId}`;
-  }
+  if (folderId) url += `&folderId=${folderId}`;
 
-  // Breadcrumb
-  document.querySelector(".breadcrumb").innerText = folderId ? "Carpeta" : "Inicio";
+  document.querySelector(".breadcrumb").innerText =
+    folderId ? "Carpeta" : "Inicio";
 
   fetch(url)
     .then(res => res.json())
@@ -70,55 +71,30 @@ function loadFiles(folderId = null) {
 
       html += '</div>';
       document.querySelector(".files").innerHTML = html;
-
-    })
-    .catch(err => {
-      console.error(err);
-      document.querySelector(".files").innerHTML = "Error cargando archivos";
     });
 }
 
-// 👁 Vista previa
-function previewFile(url) {
-  window.open(url, "_blank");
-}
+// ===============================
+// 📂 UPLOAD MODAL
+// ===============================
 
-// ⬇ Descargar
-function downloadFile(url) {
-  window.open(url, "_blank");
-}
-
-// 🚪 Logout
-function logout() {
-  localStorage.removeItem("user");
-  window.location.href = "index.html";
-}
-
-// =============================
-// 🔥 MODAL SUBIDA PROFESIONAL
-// =============================
-
-// 🔓 Abrir modal
 function openUploadModal() {
   document.getElementById("uploadModal").style.display = "flex";
 }
 
-// 🔒 Cerrar modal
 function closeUploadModal() {
   document.getElementById("uploadModal").style.display = "none";
-
-  // Reset
   selectedFile = null;
   document.getElementById("fileInfo").style.display = "none";
 }
 
-// 📂 Configurar eventos (IMPORTANTE)
-document.addEventListener("DOMContentLoaded", function () {
+// 🔥 INICIALIZAR EVENTOS
+function initUploadEvents() {
 
   const fileInput = document.getElementById("fileInputHidden");
   const dropZone = document.getElementById("dropZone");
 
-  // 📂 Selección desde botón
+  // 📂 INPUT
   fileInput.addEventListener("change", function (e) {
     if (e.target.files.length > 0) {
       selectedFile = e.target.files[0];
@@ -126,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // 🖱 Drag & Drop
+  // 🖱 DRAG
   dropZone.addEventListener("dragover", (e) => {
     e.preventDefault();
     dropZone.classList.add("dragover");
@@ -145,19 +121,16 @@ document.addEventListener("DOMContentLoaded", function () {
       showFileInfo(selectedFile);
     }
   });
+}
 
-});
-
-// 🔍 Mostrar archivo seleccionado
+// 📄 Mostrar archivo
 function showFileInfo(file) {
   document.getElementById("fileInfo").style.display = "block";
   document.getElementById("fileName").innerText = file.name;
 }
 
-// 🚀 Subir archivo (BOTÓN FUNCIONAL)
+// 🚀 SUBIR ARCHIVO
 function confirmUpload() {
-
-  console.log("Subiendo archivo...");
 
   if (!selectedFile) {
     alert("Selecciona un archivo primero");
@@ -198,4 +171,20 @@ function confirmUpload() {
   };
 
   reader.readAsDataURL(selectedFile);
+}
+
+// ===============================
+// UTILIDADES
+// ===============================
+function previewFile(url) {
+  window.open(url, "_blank");
+}
+
+function downloadFile(url) {
+  window.open(url, "_blank");
+}
+
+function logout() {
+  localStorage.removeItem("user");
+  window.location.href = "index.html";
 }
