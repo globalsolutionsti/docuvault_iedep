@@ -1,0 +1,118 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f6f8;
+}
+
+/* 🔷 HEADER */
+.topbar {
+  height: 60px;
+  background: #1f3a5f;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.logo {
+  font-weight: bold;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.top-actions input {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+}
+
+.icon {
+  cursor: pointer;
+}
+
+/* 🧱 LAYOUT */
+.container {
+  display: flex;
+  height: calc(100vh - 60px);
+}
+
+/* 🧭 SIDEBAR */
+.sidebar {
+  width: 220px;
+  background: #ffffff;
+  border-right: 1px solid #ddd;
+  padding: 10px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.sidebar li:hover,
+.sidebar .active {
+  background: #e6eef7;
+}
+
+.library {
+  margin-top: 20px;
+}
+
+.trash {
+  color: red;
+}
+
+/* 📂 CONTENIDO */
+.content {
+  flex: 1;
+  padding: 15px;
+}
+
+.toolbar {
+  margin-bottom: 10px;
+}
+
+.toolbar button {
+  margin-right: 5px;
+  padding: 8px 10px;
+  border: none;
+  background: #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.toolbar .primary {
+  background: #0078d4;
+  color: white;
+}
+
+.breadcrumb {
+  margin: 10px 0;
+  color: #555;
+}
+
+.files {
+  background: white;
+  height: 70%;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+/* 🧾 PANEL DERECHO */
+.right-panel {
+  width: 250px;
+  background: #ffffff;
+  border-left: 1px solid #ddd;
+  padding: 10px;
+}
