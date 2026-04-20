@@ -140,23 +140,23 @@ function confirmUpload() {
   const formData = new FormData();
 
   formData.append("file", selectedFile);
-  formData.append("action", "uploadFile");
-  formData.append("folderId", currentFolder || "");
-  formData.append("usuario", JSON.parse(localStorage.getItem("user")).nombre);
 
   fetch(API_URL, {
     method: "POST",
     body: formData
   })
-  .then(res => res.text()) // 🔥 IMPORTANTE
-  .then(res => {
+  .then(res => res.json())
+  .then(data => {
 
-    console.log("RESPUESTA:", res);
+    console.log(data);
 
-    alert("Archivo subido correctamente");
-
-    closeUploadModal();
-    loadFiles(currentFolder);
+    if (data.status === "success") {
+      alert("Archivo subido correctamente");
+      closeUploadModal();
+      loadFiles(currentFolder);
+    } else {
+      alert("Error: " + data.message);
+    }
 
   })
   .catch(err => {
