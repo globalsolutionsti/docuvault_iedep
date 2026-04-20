@@ -23,24 +23,33 @@ function logout() {
   window.location.href = "index.html";
 }
 function loadFiles() {
-  fetch(`${API_URL}?action=getFiles`)
+  fetch(`${API_URL}?action=getDriveItems`)
     .then(res => res.json())
     .then(data => {
-      let html = "<table><tr><th>Nombre</th><th>Versión</th><th>Acciones</th></tr>";
 
-      data.forEach(file => {
-        html += `
-          <tr>
-            <td>${file.nombre}</td>
-            <td>${file.version}</td>
-            <td>
-              <button onclick="deleteFile(${file.id})">Eliminar</button>
-            </td>
-          </tr>
-        `;
+      let html = '<div class="grid">';
+
+      data.forEach(item => {
+
+        if (item.type === "folder") {
+          html += `
+            <div class="card folder">
+              📁
+              <p>${item.name}</p>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="card file">
+              📄
+              <p>${item.name}</p>
+            </div>
+          `;
+        }
+
       });
 
-      html += "</table>";
+      html += '</div>';
 
       document.querySelector(".files").innerHTML = html;
     });
