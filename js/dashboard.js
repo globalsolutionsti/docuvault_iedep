@@ -33,16 +33,21 @@ function loadFiles() {
 
         if (item.type === "folder") {
           html += `
-            <div class="card folder">
-              📁
+            <div class="card folder" onclick="openFolder('${item.id}')">
+              <div class="icon">📁</div>
               <p>${item.name}</p>
             </div>
           `;
         } else {
           html += `
             <div class="card file">
-              📄
+              <div class="icon">📄</div>
               <p>${item.name}</p>
+
+              <div class="actions">
+                <button onclick="previewFile('${item.url}')">Ver</button>
+                <button onclick="downloadFile('${item.download}')">Descargar</button>
+              </div>
             </div>
           `;
         }
