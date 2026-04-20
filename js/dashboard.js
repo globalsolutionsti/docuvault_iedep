@@ -138,7 +138,6 @@ function confirmUpload() {
   }
 
   const formData = new FormData();
-
   formData.append("file", selectedFile);
 
   fetch(API_URL, {
@@ -147,7 +146,6 @@ function confirmUpload() {
   })
   .then(res => res.json())
   .then(data => {
-
     console.log(data);
 
     if (data.status === "success") {
@@ -157,7 +155,6 @@ function confirmUpload() {
     } else {
       alert("Error: " + data.message);
     }
-
   })
   .catch(err => {
     console.error(err);
