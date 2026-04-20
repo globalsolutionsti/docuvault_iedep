@@ -101,3 +101,17 @@ window.onload = function () {
     loadFiles();
   }
 };
+// 👁 Vista previa
+function previewFile(url) {
+  window.open(url, "_blank");
+}
+
+// ⬇ Descargar
+function downloadFile(url) {
+  window.open(url, "_blank");
+}
+
+// 📂 Navegar carpetas (fase siguiente)
+function openFolder(id) {
+  alert("Entrar a carpeta (siguiente fase)");
+}
