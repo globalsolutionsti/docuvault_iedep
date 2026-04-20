@@ -21,7 +21,9 @@ function loadFiles(folderId = null) {
   if (folderId) {
     url += `&folderId=${folderId}`;
   }
-
+if (!folderId) {
+  document.querySelector(".breadcrumb").innerText = "Inicio";
+}
   fetch(url)
     .then(res => res.json())
     .then(data => {
