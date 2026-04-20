@@ -137,31 +137,57 @@ function confirmUpload() {
     return;
   }
 
-  const formData = new FormData();
-  formData.append("file", selectedFile);
+  // 🔥 LIMITE (IMPORTANTE)
+  if (selectedFile.size > 5 * 1024 * 1024) {
+    alert("Archivo demasiado grande (máx 5MB)");
+    return;
+  }
 
-  fetch(API_URL, {
-    method: "POST",
-    body: formData
-  })
-  .then(res => res.json())
-  .then(data => {
-    console.log(data);
+  const reader = new FileReader();
 
-    if (data.status === "success") {
-      alert("Archivo subido correctamente");
-      closeUploadModal();
-      loadFiles(currentFolder);
-    } else {
-      alert("Error: " + data.message);
-    }
-  })
-  .catch(err => {
-    console.error(err);
-    alert("Error al subir archivo");
-  });
+  reader.onload = function () {
+
+    const base64 = reader.result.split(",")[1];
+
+    fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action: "uploadFile",
+        file: base64,
+        fileName: selectedFile.name,
+        mimeType: selectedFile.type,
+        folderId: currentFolder,
+        usuario: JSON.parse(localStorage.getItem("user")).nombre
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+
+      console.log("RESPUESTA:", data);
+
+      if (data.status === "success") {
+        alert("Archivo subido correctamente");
+
+        closeUploadModal();
+        loadFiles(currentFolder);
+
+      } else {
+        alert("Error: " + data.message);
+      }
+
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Error de conexión");
+    });
+
+  };
+
+  reader.readAsDataURL(selectedFile);
 }
-
 // ===============================
 // UTILIDADES
 // ===============================
