@@ -174,10 +174,53 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // 🚀 SUBIDA CENTRAL
-function handleFileUpload(file) {
+let selectedFile = null;
 
-  if (!file) {
-    alert("Selecciona un archivo");
+// 📂 SELECCIÓN
+document.addEventListener("DOMContentLoaded", function () {
+
+  const fileInput = document.getElementById("fileInputHidden");
+  const dropZone = document.getElementById("dropZone");
+
+  fileInput.addEventListener("change", function () {
+    setFile(fileInput.files[0]);
+  });
+
+  dropZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropZone.classList.add("dragover");
+  });
+
+  dropZone.addEventListener("dragleave", () => {
+    dropZone.classList.remove("dragover");
+  });
+
+  dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropZone.classList.remove("dragover");
+
+    const file = e.dataTransfer.files[0];
+    setFile(file);
+  });
+
+});
+
+// 🔥 GUARDAR ARCHIVO SELECCIONADO
+function setFile(file) {
+
+  if (!file) return;
+
+  selectedFile = file;
+
+  document.getElementById("fileInfo").style.display = "block";
+  document.getElementById("fileName").innerText = file.name;
+}
+
+// 🚀 CONFIRMAR SUBIDA
+function confirmUpload() {
+
+  if (!selectedFile) {
+    alert("Selecciona un archivo primero");
     return;
   }
 
@@ -192,8 +235,8 @@ function handleFileUpload(file) {
       body: JSON.stringify({
         action: "uploadFile",
         file: base64,
-        fileName: file.name,
-        mimeType: file.type,
+        fileName: selectedFile.name,
+        mimeType: selectedFile.type,
         folderId: currentFolder,
         usuario: JSON.parse(localStorage.getItem("user")).nombre
       })
@@ -203,9 +246,10 @@ function handleFileUpload(file) {
       alert("Archivo subido correctamente");
       closeUploadModal();
       loadFiles(currentFolder);
+      selectedFile = null;
     });
 
   };
 
-  reader.readAsDataURL(file);
+  reader.readAsDataURL(selectedFile);
 }
