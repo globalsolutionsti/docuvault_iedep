@@ -25,14 +25,14 @@ function loadFiles() {
           html += `
             <div class="card folder" onclick="openFolder('${item.id}')">
               <div class="icon">📁</div>
-              <p>${item.name}</p>
+             <p title="${item.name}">${item.name}</p>
             </div>
           `;
         } else {
           html += `
             <div class="card file">
               <div class="icon">📄</div>
-              <p>${item.name}</p>
+              <p title="${item.name}">${item.name}</p>
 
               <div class="actions">
                 <button onclick="previewFile('${item.url}')">Ver</button>
