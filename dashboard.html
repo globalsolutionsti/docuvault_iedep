@@ -43,7 +43,7 @@
   <main class="content">
 
     <div class="toolbar">
-      <button class="primary">+ Nuevo / Subir</button>
+      <button class="primary" onclick="openUploadModal()">+ Nuevo / Subir</button>
       <button>Nueva Carpeta</button>
       <button disabled>Compartir</button>
       <button disabled>Descargar</button>
@@ -69,6 +69,24 @@
 
 </div>
 
+<div id="uploadModal" class="modal">
+  <div class="modal-content">
+
+    <span class="close" onclick="closeUploadModal()">✖</span>
+
+    <h2>Subir archivo</h2>
+
+    <div id="dropZone" class="drop-zone">
+      <p>Arrastra y suelta archivos aquí</p>
+      <p>o</p>
+      <button onclick="document.getElementById('fileInputHidden').click()">Seleccionar archivo</button>
+      <input type="file" id="fileInputHidden" hidden>
+    </div>
+
+  </div>
+</div>
+
+  
 <script src="js/config.js"></script>
 <script src="js/dashboard.js"></script>
 </body>
