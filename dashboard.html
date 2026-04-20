@@ -83,6 +83,17 @@
       <input type="file" id="fileInputHidden" hidden>
     </div>
 
+    <!-- 🔥 ARCHIVO SELECCIONADO -->
+    <div id="fileInfo" style="margin-top:15px; display:none;">
+      <p><strong>Archivo:</strong> <span id="fileName"></span></p>
+    </div>
+
+    <!-- 🔥 BOTONES -->
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeUploadModal()">Cancelar</button>
+      <button class="btn-upload" onclick="confirmUpload()">Subir archivo</button>
+    </div>
+
   </div>
 </div>
 
